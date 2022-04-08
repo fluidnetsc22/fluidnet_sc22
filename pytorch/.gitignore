@@ -1,0 +1,9 @@
+misc
+figures
+plot
+model
+data
+data2
+__pycache__
+pybind11
+*.pyc

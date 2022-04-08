@@ -1,0 +1,179 @@
+# Configuration file with default parameters.
+# Some can be modified through the command line. See help function for training
+# script and README.md for more info.
+# This table is saved to disk (as pytorch objects) on every epoch
+# so that simulations can be paused and restarted.
+# =========================================
+#   MODEL
+# =========================================
+
+# =========================================
+#   DATA
+# =========================================
+# dataDir : Dataset location
+dataDir: "/path/to/data/data_3d"
+# dataset : Dataset name. Folder inside dataDir with training and testing scenes
+dataset: "output_current_3d_model_sphere"
+# remote: Choose to load dataset from s3 card
+remote: False
+# local_remote: Download only first time using s5cmd
+local_remote: True
+# numWorkers : number of parallel workers for dataloader. Set to 0 to allow PyTorch
+# to automatically manage loading.
+numWorkers: 10
+# If true, dataset is preprocessed and programs exists.
+# Preprocessing is automatic if no previous preproc is detected on current dataset.
+preprocOriginalFluidNetDataOnly: false
+# shuffleTraining : Shuffles dataset
+shuffleTraining: true
+
+# =========================================
+#   OUTPUT
+# =========================================
+# modelDir : Output folder for trained model and loss log.
+modelDir: "/path/to/fluidnet/fluidnet_cxx_2/trained_models/RF/UNet_5_RF_256_p_100"
+# modelFilename : Trained model name
+modelFilename: "convModel"
+
+# =========================================
+#   TRAINING MONITORING
+# =========================================
+
+# freqToFile : Epoch frequency for loss output to file/image saving.
+freqToFile: 5
+# printTraining : Debug options for training.
+# Prints or shows validation dataset and compares net
+# output to GT.
+# Options: save (save figures), show (shows in windows), none
+printTraining: "save"
+
+# =========================================
+#   TRAINING PARAMETER
+# =========================================
+
+batchSize: 184
+# maxEpochs : Maximum number of epochs
+maxEpochs: 300
+# resume : resume training from checkpoint.
+resumeTraining: false  # true
+# Is the network parallel?
+paralel: true
+
+modelParam:
+    # model : options ('FluidNet', 'ScaleNet')
+    #   -FluidNet : uses the architecture found in lib/model.py (based on FluidNet)
+    #   -ScaleNet : uses a multiscale architecture found in lib/multi_scale_net.py
+    model: "ScaleNet"
+    model_name: 'FlexiUNet'  # Choose between FlexiNet, FlexiUnet and FourierNet
+    scales:
+        depth_0: [[2, 34, 28], [56, 34, 1]]
+        depth_1: [[28, 16, 16, 30], [50, 16, 16, 28]]
+        depth_2: [[30, 24, 30], [60, 24, 20]]
+        depth_3: [[30, 16, 16, 30], [50, 16, 16, 30]]
+        depth_4: [30, 36, 36, 20]
+    kernel_sizes: 3
+    input_res: [64, 64, 64]
+    input_val: True                     # Boolean to see if the intial field is inputted or not
+    output_val: True                   # Boolean to see if the output fields are added
+    pad_method: 'replicate'              # String for padding method, choose between: 'circular',
+    modes: 10
+    width: 16
+
+    # inputChannels : Network inputs. At least one of them must be set to true!
+    inputChannels:
+        div: true
+        pDiv: false
+        UDiv: false
+    # lr : learning rate. If using scientific notation, necessary to precise type
+    # for yaml->python cast.
+    lr: !!python / float 1e-4
+    # fooLambda : Weighting for each loss. Set to 0 to disable loss.
+    # MSE of pressure
+    pL2Lambda: 0
+    # MSE of divergence (Ground truth is zero divergence)
+    divL2Lambda: 1
+    # Absolute difference of pressure
+    pL1Lambda: 0
+    # Absolute difference of divergence
+    divL1Lambda: 0
+    # MSE of long term divergence
+    # If > 0, implements the Long Term divergence concept from FluidNet
+    divLongTermLambda: 0  # 5
+    # longTermDivNumSteps : We want to measure what the divergence is after
+    # a set number of steps for each training and test sample. Set table
+    # to nil to disable, (or set longTermDivLambda to 0).
+    longTermDivNumSteps:
+        - 4
+        - 16
+    # longTermDivProbability is the probability that longTermDivNumSteps[0]
+    # will be taken, otherwise longTermDivNumSteps[1] will be taken with
+    # probability of 1 - longTermDivProbability.
+    longTermDivProbability: 0.9
+    # normalizeInput : if true, normalizes input by max(std(chan), threshold)
+    normalizeInput: true
+    # normalizeInputChan : which channel to calculate std
+    normalizeInputChan: "UDiv"
+    # normalizeInputThreshold : don't normalize input noise
+    normalizeInputThreshold: 0.00001
+    # recurrent training where the network recorrects the velocity
+    recurrent: false
+
+    # =========================================
+    #   PHYSICAL PARAMETERS
+    # =========================================
+    # Time step: default simulation timestep.
+    dt: 0.1
+
+    # ONLY APPLIED IF LONG TERM DIV IS ACTIVATED
+    #  ----------------------------------
+    # buoyancyScale : Buoyancy forces scale
+    # gravityScale : Gravity forces scale
+    # Note: Manta and FluidNet divide gravity forces into "gravity" and "buoyancy"
+    # They represent the two terms arising from Boussinesq approximation
+    # rho*g = rho_0*g + delta_rho*g
+    #           (1)         (2)
+    # rho_0 being the average density and delta_rho local difference of density
+    # w.r.t average density.
+    # Mantaflow calls (1) gravity and (2) buoyancy and allows for different g's
+    buoyancyScale: 0
+    gravityScale: 0
+    # Gravity vector: Direction of gravity Vector
+    gravityVec:
+        x: 0
+        y: 0
+        z: 0
+    # training buoyancy scale : This is the buoyancy to use when adding buoyancy
+    # to the long term training. It will be applied in a random cardinal direction.
+    trainBuoyancyScale: 2.0
+    # training buoyancy probability : This is the probability to add buoyancy when
+    # long term training.
+    trainBuoyancyProb: 0.3
+    # training gravity scale : This is the gravity to use when adding gravity
+    # to the long term training. It will be applied in a random cardinal direction.
+    trainGravityScale: 0.0
+    # training gravity probability : This is the probability to add buoyancy when
+    # long term training.
+    trainGravityProb: 0.0
+    # ------------------------------------
+    # Introduces a correcting factor in the denisty equation
+    # from "A splitting method for incompressible flows with variable
+    # density based on a pressure Poisson equation" (Guermond, Salgado).
+    # Not really tested... Recommendation is to leave it as false.
+    correctScalar: false
+    # operatingDensity : When applying buoyancy, buoyancyScale is multiplied
+    # by (density(i,j) - operatingDensity)
+    operatingDensity: 0.0
+    # viscosity : introduces a viscous term in moment equation.
+    # Algortihm taken from the book "Fluid Simulation for Computer Graphics" by
+    # Bridson
+    viscosity: 0
+    # timeScaleSigma : Amplitude of time scale perturb during training.
+    timeScaleSigma: 1
+    # maccormackStrength : used in semi-lagrangian MacCormack advection
+    # when LT div is activated. 0.6 is a good value. If ~1, can lead to
+    # high frequency artifacts.
+    maccormackStrength: 0.6
+    # sampleOutsideFluid : if true, allows particles in advection to 'land' inside
+    # obstacles. In general, we don't want that, so leave it as false to avoid
+    # possible artifacts.
+    sampleOutsideFluid: false

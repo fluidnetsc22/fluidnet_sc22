@@ -1,0 +1,30 @@
+########################################################################################################################
+#                                                                                                                      #
+#                                           3D Data -- Configuration file                                              #
+#                                                                                                                      #
+#                                                                                                                      #
+########################################################################################################################
+
+# Contains the parameters for the 3D DMD study and plots
+
+base_folder: '/path/to/base/folder/fluidnet_cxx_2/results_3d/VK_3D/postproc'
+                                                  # Folder where the plots will be saved
+load_folder: '/path/to/base/folder/fluidnet_cxx_2/results_3d/VK_3D'
+                                                  # Folder where the CharlesX data is stored
+save_folder: './Debug_3D_Re_small_3000/'
+
+networks: ['CG', 'Unet']
+
+Reynolds: 3000                                         # Reynolds number to be studied
+
+init_it: 20100                                          # First Iterations recorded
+n_its: 99                                               # Number of saved snapshots
+interval: 100                                           # Saving interval for snapshots
+outiter: 10                                             # Plot every n of saved snapshot
+
+resX: 128
+resY: 192
+resZ: 64
+
+diam: 16
+dt: 0.2
