@@ -13,7 +13,7 @@ To install this repo:
 
 1. Clone this repo:
 ```
-git clone https://gitlab.com/daep-ia/fluidnet_cxx_2.git
+git clone https://.git
 ```
 
 Make sure that you are in the correct branch!
