@@ -16,8 +16,6 @@ To install this repo:
 git clone https://github.com/fluidnetsc22/fluidnet_sc22.git
 ```
 
-Make sure that you are in the correct branch!
-
 2. Create and activate a conda environement
 ```
 conda create --name py38 python=3.8
@@ -25,10 +23,8 @@ conda activate py38
 ```
 
 
-3. Install Pytorch 1.7.1 compiled with cuda 11, and the rest of necessary packages from the requirements file:
-__NOTE: Training is done in GPUs with recent cuda installations__
-
-To install the rest of the packages just go to the main fluidnet path and perform:
+3. Install Pytorch 1.7.1 compiled with cuda 11, and the rest of necessary packages from the requirements file. To install the rest of the packages just go to the main fluidnet path and perform:
+4. 
 ```
 cd /path/to/git/repo/fluidnet_cxx_2
 pip install -r requirements.txt
@@ -44,9 +40,10 @@ conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=11
 4. Install cpp extensions for fluid solver:
 C++ scripts have been written using PyTorch's backend C++ library ATen.
 These scripts are used for the advectionn part and the non CNN pressure solvers.
-Note that the code uses helper functions from cuda samples, which is not always easily found when compiling,
+Note that the code uses helper functions from cuda samples, which are not always easily found when compiling,
 thus they are manually especified!(change to the correct path located in path of the cuda sources)
 From the main directory follow:
+
 ```
 cd pytorch/lib/fluid/cpp
 CPATH=/usr/local/cuda-11.0/include:/usr/local/cuda-11.0/samples/common/inc python3 setup.py install
@@ -55,11 +52,12 @@ CPATH=/usr/local/cuda-11.0/include:/usr/local/cuda-11.0/samples/common/inc pytho
 Do not forget to load the correct gcc compiler and to connect to the gpus to find the cuda sources. Also note that the samples need to be from cuda 11 (instead it will fail to compile).
 
 5. As an optional feature, ```s5cmd```should be installed if the dataset needs to be loaded from a remote storing system, such as ```S3 buckets```. This is achived by downloading the binary files from the [source.](https://github.com/peak/s5cmd/releases), which should be a file similar to ```s5cmd_1.4.0_Linux-64bit.tar.gz```. This file should be copied at the bin directory located in the home path. This tar file should be decompressed, and then a symbolic link should be created:
+6. 
 ```
 ln -s ~/bin/s5cmd s5cmd
 ```
 
-With all this in mind, the cpp extension should be correctly installed. Note that even if some warning pop up this does not block the code compilation (these warning will be removed in posterior versions `f the code). Thus, your environment should be ready to run the training and inference cases!
+With all this in mind, the cpp extension should be correctly installed. Note that even if some warning pop up this does not block the code compilation (these warning will be removed in posterior versions of the code). Thus, your virtual environment should be ready to run the training and inference. cases!
 
 
 
@@ -67,16 +65,16 @@ With all this in mind, the cpp extension should be correctly installed. Note tha
 ## Training
 
 **Dataset**
-We use the same **3D dataset** as the original FluidNet [Section 1: Generating the data - Generating training data](https://github.com/google/FluidNet#1-generating-the-data) (generated with MantaFlow) for training our ConvNet.
+We use the same **3D dataset** as the original FluidNet [Section 1: Generating the data - Generating training data](https://github.com/google/FluidNet#1-generating-the-data) (generated with MantaFlow) for training our CNN.
 
-The entire dataset weighs arounf 1.5 Tb after preprocessing, so depending on the strage capacities 3 options are included:
+The entire dataset weighs arounf 1.5 Tb after preprocessing, so depending on the storage capacities, 3 options are included:
 
-1. If enough memory is available in your local file system, the dataset can be directly loaded from the local file system, obtaining the best performances. This option is by default set to false in the training config yaml files,
+1. If enough memory is available in your local file system, the dataset can be directly loaded from the local file system, which enables to obtain the best performances during training. This option is by default set to false in the training config yaml files,
 ```remote: False```
 
-2. Even if enough storing space is available, when using AWS remote machines, everytime the machines are stopped the data stored in the local NVME filesystems is lost, so instead of generating the dataset from scratch an alternative was proposed. The dataset was stored in a remote memory storage, or ``S3 bucket``. Thus, once the machine is started, in the first epoch the entire dataset is copied using [s5cmd](https://github.com/peak/s5cmd), which yields copying velocities of around ~2 Gb/s. This operation despite being long, only needs to be done once for everytime the remote machine is restarted. For optimum download velocity the dataset was compressed to around 1 GB .tar.gz files. This option is activated in the config file by specifying: ```remote: True``` and ```local_remote: True```.
+2. Even if enough storing space is temporally available, in some cases this storing capacity is only momentaneously available, e.g. in on-demand cloud instances. For such cases, every time the machines are stopped, the data stored in the local NVME filesystems is lost. For such configurations, instead of generating the dataset from scratch, the dataset can be stored in a remote memory storage, or ``S3 bucket``. Thus, this code enables to read the dataset from a remote storing object, and it copies the entire dataset locally in the first epoch using [s5cmd](https://github.com/peak/s5cmd), which yields copying velocities of around ~2 Gb/s. This operation despite being long, only needs to be done once for everytime the remote machine is restarted. For optimum download velocity the dataset was compressed to around 1 GB tar.gz files. This option is activated in the config file by specifying: ```remote: True``` and ```local_remote: True```.
 
-3. In cases where the NVME is not large enough, the dataset can be directly read from the remote ``S3 bucket``, by setting the option ```remote: True```. Similarly to the previous case, for optimum performance the dataset should be stored in around 1 GB compressed files. Moreover, when reading from the remote bucket an interesting phenomenon was observed. Considerably increasing the number of workers had a negative impact on the training performance, as the prefetching step got considerably longer, leading to slower trainings as well as possible RAM issues. This option is activated in the config file by specifying: ```remote: True``` and ```local_remote: False```.
+3. In cases where the NVME is not large enough, the dataset can be directly read from the remote ``S3 bucket``, by setting the option ```remote: True``` and ```local_remote: False```. Similarly to the previous case, for optimum performance the dataset should be stored in around 1 GB compressed files. For these cases, considerably increasing the number of workers has a negative impact on the training performance, as the prefetching step gets considerably longer, leading to slower trainings as well as possible RAM issues.
 
 
 The paths and files for the remote reading are still hardcoded in the ```fluid_net_train.py``` file (lines 119-150), further automatization should be developed in future versions of the code.
