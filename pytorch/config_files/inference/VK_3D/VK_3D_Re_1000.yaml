@@ -23,7 +23,7 @@ outputFolder: "/path/to/results/Re1000/CG"
 # simMethod: choose convnet, CG or jacobi
 simMethod: "CG"
 # modelDir : location of trained model
-modelDir: "/path/to/fluidnet/fluidnet_cxx_2/trained_models/RF/UNet_3_RF_64_p_100"
+modelDir: "/path/to/fluidnet/fluidnet_sc22/trained_models/RF/UNet_3_RF_64_p_100"
 # modelFilename : name of trained model
 modelFilename: "convModel"
 # dt : simualation timestep
@@ -47,7 +47,7 @@ maccormackStrength: 0.6
 # rho_0 being the average density and delta_rho local difference of density
 # w.r.t average density.Ò
 # Mantaflow calls (1) gravity and (2) buoyancy and allows for different g's
-buoyancyScale: !!python / float 0.0
+buoyancyScale: !!python/float 0.0
 gravityScale: 0
 # Introduces a correcting factor in the denisty equation
 # from "A splitting method for incompressible flows with variable
