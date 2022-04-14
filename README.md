@@ -52,7 +52,7 @@ CPATH=/usr/local/cuda-11.0/include:/usr/local/cuda-11.0/samples/common/inc pytho
 Do not forget to load the correct gcc compiler and to connect to the gpus to find the cuda sources. Also note that the samples need to be from cuda 11 (instead it will fail to compile).
 
 5. As an optional feature, ```s5cmd```should be installed if the dataset needs to be loaded from a remote storing system, such as ```S3 buckets```. This is achived by downloading the binary files from the [source.](https://github.com/peak/s5cmd/releases), which should be a file similar to ```s5cmd_1.4.0_Linux-64bit.tar.gz```. This file should be copied at the bin directory located in the home path. This tar file should be decompressed, and then a symbolic link should be created:
-6. 
+
 ```
 ln -s ~/bin/s5cmd s5cmd
 ```
