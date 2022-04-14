@@ -31,7 +31,7 @@ shuffleTraining: true
 #   OUTPUT
 # =========================================
 # modelDir : Output folder for trained model and loss log.
-modelDir: "/path/to/fluidnet/fluidnet_cxx_2/trained_models/RF/UNet_4_RF_64_p_100"
+modelDir: "/path/to/fluidnet/fluidnet_sc22/trained_models/RF/UNet_4_RF_64_p_100"
 # modelFilename : Trained model name
 modelFilename: "convModel"
 
