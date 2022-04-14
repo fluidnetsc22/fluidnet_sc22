@@ -19,11 +19,11 @@ realTimePlot: false
 # use Paraview to load those files.
 saveVTK: false
 # outputFolder : folder for storing results, checkpoints and config files
-outputFolder: "/path/to/fluidnet/fluidnet_cxx_2/results_3d/Plume_3D/Ri_0_1/Unet_3D"
+outputFolder: "/path/to/fluidnet/fluidnet_sc22/results_3d/Plume_3D/Ri_0_1/Unet_3D"
 # simMethod: choose convnet or jacobi
 simMethod: "convnet"
 # modelDir : location of trained model
-modelDir: "/path/to/fluidnet/fluidnet_cxx_2/trained_models/RF/UNet_5_RF_128_p_100"
+modelDir: "/path/to/fluidnet/fluidnet_sc22/trained_models/RF/UNet_5_RF_128_p_100"
 # List containing networks to study
 study_nets: [UNet_4_RF_128_p_100, UNet_5_RF_128_p_100, Jacobi]
 # modelFilename : name of trained model
@@ -47,7 +47,7 @@ maccormackStrength: 0.6
 # rho_0 being the average density and delta_rho local difference of density
 # w.r.t average density.
 # Mantaflow calls (1) gravity and (2) buoyancy and allows for different g's
-buoyancyScale: !!python / float 0.0053879  # 0.5388
+buoyancyScale: !!python/float 0.0053879  # 0.5388
 gravityScale: 0
 # Introduces a correcting factor in the denisty equation
 # from "A splitting method for incompressible flows with variable
