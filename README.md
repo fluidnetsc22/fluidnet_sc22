@@ -26,7 +26,7 @@ conda activate py38
 3. Install Pytorch 1.7.1 compiled with cuda 11, and the rest of necessary packages from the requirements file. To install the rest of the packages just go to the main fluidnet path and perform:
 
 ```
-cd /path/to/git/repo/fluidnet_cxx_2
+cd /path/to/git/repo/fluidnetsc22
 pip install -r requirements.txt
 ```
 
