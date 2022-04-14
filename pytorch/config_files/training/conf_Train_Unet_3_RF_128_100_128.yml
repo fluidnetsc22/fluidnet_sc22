@@ -84,7 +84,7 @@ modelParam:
         UDiv: false
     # lr : learning rate. If using scientific notation, necessary to precise type
     # for yaml->python cast.
-    lr: !!python / float 1e-4
+    lr: !!python/float 1e-4
     # fooLambda : Weighting for each loss. Set to 0 to disable loss.
     # MSE of pressure
     pL2Lambda: 0
