@@ -23,4 +23,5 @@ termcolor==1.1.0
 toml==0.10.1
 tqdm==4.19.9
 typed-ast==1.4.1
+webdataset==0.2.5
 wrapt==1.12.1
