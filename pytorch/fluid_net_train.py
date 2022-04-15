@@ -113,7 +113,8 @@ remote = conf['remote']
 local_remote = conf['local_remote']
 
 if remote:
-
+    # THESE PATHS ARE STILL HARDCODE
+    # PLEASE CONSEQUENTLY MODIFY THEM WITH THE CORRECT LOCAL AND BUCKET INFORMATION
     if local_remote:
         if not os.path.isdir('/data/ubuntu/loaded'):
             os.makedirs('/data/ubuntu/loaded')
