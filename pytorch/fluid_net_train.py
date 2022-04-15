@@ -215,9 +215,9 @@ try:
     print('Number of workers: ' + str(num_workers))
     if remote:
         train_loader = torch.utils.data.DataLoader(tr, batch_size=batch_size,
-                            num_workers=num_workers, shuffle=False, pin_memory=True, prefetch_factor=1, persistent_workers=True)
+                            num_workers=num_workers, shuffle=False, pin_memory=False, prefetch_factor=1, persistent_workers=True)
         test_loader = torch.utils.data.DataLoader(te, batch_size=batch_size,
-                            num_workers=num_workers, shuffle=False, pin_memory=True, prefetch_factor=1, persistent_workers=True)
+                            num_workers=num_workers, shuffle=False, pin_memory=False, prefetch_factor=1, persistent_workers=True)
     else:
         train_loader = torch.utils.data.DataLoader(tr, batch_size=batch_size,
                             num_workers=num_workers, shuffle=shuffle_training, pin_memory=True)
