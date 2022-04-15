@@ -77,7 +77,7 @@ The entire dataset weighs arounf 1.5 Tb after preprocessing, so depending on the
 3. In cases where the NVME is not large enough, the dataset can be directly read from the remote ``S3 bucket``, by setting the option ```remote: True``` and ```local_remote: False```. Similarly to the previous case, for optimum performance the dataset should be stored in around 1 GB compressed files. For these cases, considerably increasing the number of workers has a negative impact on the training performance, as the prefetching step gets considerably longer, leading to slower trainings as well as possible RAM issues.
 
 
-The paths and files for the remote reading are still hardcoded in the ```fluid_net_train.py``` file (lines 119-150), further automatization should be developed in future versions of the code.
+The paths and files for the remote reading are still hardcoded in the ```fluid_net_train.py``` file (lines 115-140), further automatization should be developed in future versions of the code.
 
 
 ### **Running the training**
